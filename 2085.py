@@ -1,15 +1,18 @@
 from collections import defaultdict
-
 class Solution:
     def countWords(self, words1: List[str], words2: List[str]) -> int:
-        d1 = defaultdict(int)
-        for i in words1:
-            d1[i] += 1
-        d2 = defaultdict(int)
-        for i in words2:
-            d2[i] += 1
-        s1 = [i for i in d1 if d1[i] == 1]
-        s2 = [i for i in d2 if d2[i] == 1]
-        ans = set(s1).intersection(s2)
-        return len(ans)
+        count1 = defaultdict(int)
+        count2 = defaultdict(int)
         
+        for word in words1:
+            count1[word] += 1
+            
+        for word in words2:
+            count2[word] += 1
+        
+        unique1 = {word for word in count1 if count1[word] == 1}
+        unique2 = {word for word in count2 if count2[word] == 1}
+        
+        common_unique_words = unique1.intersection(unique2)
+        
+        return len(common_unique_words)
