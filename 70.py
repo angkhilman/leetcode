@@ -1,15 +1,15 @@
 class Solution:
-    def climbStairs(self, n: int) -> int:
+    def __init__(self):
+        self.memo = {}
+    def rec(self, n):
+        if n in self.memo:
+            return self.memo[n]
         if n == 1:
             return 1
         if n == 2:
             return 2
+        self.memo[n] = self.rec(n - 1) + self.rec(n - 2)
+        return self.memo[n]
 
-        # Initialize the first two steps
-        first, second = 1, 2
-        
-        # Calculate the ways to reach each step from 3 to n
-        for _ in range(3, n + 1):
-            first, second = second, first + second
-        
-        return second
+    def climbStairs(self, n: int) -> int:
+        return self.rec(n)
