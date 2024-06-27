@@ -11,8 +11,7 @@ class Solution:
 
     def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
         graph = defaultdict(list)
-        visited = {}
-        rates = {}
+        
         for i in range(len(equations)):
             a = equations[i][0]
             b = equations[i][1]
@@ -20,24 +19,18 @@ class Solution:
             graph[b].append([a, 1 / values[i]])
               
         ans = []
-        for q in queries:
-            start = q[0]
-            end = q[1]
-            for i in range(len(equations)):
-                a = equations[i][0]
-                b = equations[i][1]
-                rates[a] = -1
-                rates[b] = -1
-                visited[a] = 0
-                visited[b] = 0
-            self.dfs(graph, visited, rates, start)
-            if start == end and end in rates:
-                ans.append(1)
-            elif end in rates and start != end:
-                ans.append(float(f"{rates[end]:.5f}"))
-            else:
+        for start, end in queries:
+            if start not in graph or end not in graph:
                 ans.append(-1.0)
-        print(ans)
+                continue
+            visited = defaultdict(int)
+            rates = defaultdict(lambda: -1)
+            rates[start] = 1.0
+            self.dfs(graph, visited, rates, start)
+            if rates[end] == -1.0:
+                ans.append(-1.0)
+            else:
+                ans.append(rates[end])
         return ans
             
         
