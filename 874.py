@@ -6,44 +6,23 @@ class Solution:
             dd[i[0]].append(i[1])
         distance = 0
         ans_x, ans_y = 0, 0
-        x, y = 0, 1
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        cur_drct_ind = 0
+        x, y = directions[cur_drct_ind]
         for c in commands:
             if c == -1:
-                if x == 0 and y == 1:
-                    x, y = 1, 0
-                    continue
-                if x == 1 and y == 0:
-                    x, y = 0, -1
-                    continue
-                if x == 0 and y == -1:
-                    x, y = -1, 0
-                    continue
-                if x == -1 and y == 0:
-                    x, y = 0, 1
-                    continue
+                cur_drct_ind = (cur_drct_ind + 1) % 4
+                x, y = directions[cur_drct_ind]
             elif c == -2:
-                if x == 0 and y == 1:
-                    x, y = -1, 0
-                    continue
-                if x == -1 and y == 0:
-                    x, y = 0, -1
-                    continue
-                if x == 0 and y == -1:
-                    x, y = 1, 0
-                    continue
-                if x == 1 and y == 0:
-                    x, y = 0, 1
-                    continue
+                cur_drct_ind = (cur_drct_ind - 1) % 4
+                x, y = directions[cur_drct_ind]
                 
             else:
                 for i in range(c):
+                    if ans_x + x in dd and ans_y + y in dd[ans_x+x]:
+                        break
                     ans_y += y
                     ans_x += x
-                    if ans_x in dd:
-                        if ans_y in dd[ans_x]:
-                            ans_y -= y
-                            ans_x -= x
-                            break
                     distance = max(distance, ans_x**2 + ans_y**2)
             
         return distance
